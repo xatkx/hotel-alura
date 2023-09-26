@@ -4,6 +4,9 @@
 
 package com.hotely.alura.hotel;
 
+import com.hotely.alura.hotel.controllers.ReservaController;
+import com.hotely.alura.hotel.views.Login;
+
 /**
  *
  * @author kedwin
@@ -11,6 +14,11 @@ package com.hotely.alura.hotel;
 public class AluraHotel {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+       // Login log = new Login();
+        //log.setVisible(true);
+        
+        ReservaController repo = new ReservaController();
+        
+        repo.obtenerTodosLosReservaEntitys();
     }
 }

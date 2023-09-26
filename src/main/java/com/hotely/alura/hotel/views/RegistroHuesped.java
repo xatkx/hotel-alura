@@ -253,7 +253,7 @@ public class RegistroHuesped extends JFrame {
 		btnguardar.setBounds(723, 560, 122, 35);
 		btnguardar.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {						////////////////////////////////
 			}
 		});
 		btnguardar.setLayout(null);
