@@ -1,5 +1,6 @@
 package com.hotely.alura.hotel.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -17,22 +18,34 @@ public class HuespedeEntity {
 	private String nacionalidad;
 	private String telefono;
 	
-	@OneToMany(fetch = FetchType.LAZY )
-	List<ReservaEntity> Reservas;
-
+	@OneToOne
+	 ReservaEntity Reservas;
 	public HuespedeEntity() {
 		
 	}
+	
+	
+
+	public HuespedeEntity(String nombre, String fechaNacimiento, String nacionalidad, String telefono,
+		ReservaEntity reservas) {
+		this.nombre = nombre;
+		this.fechaNacimiento = fechaNacimiento;
+		this.nacionalidad = nacionalidad;
+		this.telefono = telefono;
+		Reservas = reservas;
+	}
+
+
 
 	public HuespedeEntity(long id, String nombre, String fechaNacimiento, String nacionalidad, String telefono,
-			ReservaEntity reservas) {
+			ReservaEntity  reservas) {
 
 		this.id = id;
 		this.nombre = nombre;
 		this.fechaNacimiento = fechaNacimiento;
 		this.nacionalidad = nacionalidad;
 		this.telefono = telefono;
-		Reservas.add(reservas);
+		Reservas = reservas;
 	}
 
 	public long getId() {
@@ -75,12 +88,20 @@ public class HuespedeEntity {
 		this.telefono = telefono;
 	}
 
-	public List<ReservaEntity> getReservas() {
+	public ReservaEntity getReservas() {
 		return Reservas;
 	}
 
 	public void setReservas(ReservaEntity reservas) {
-		Reservas.add(reservas);
+		Reservas = reservas;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "HuespedeEntity [id=" + id + ", nombre=" + nombre + ", fechaNacimiento=" + fechaNacimiento
+				+ ", nacionalidad=" + nacionalidad + ", telefono=" + telefono + ", Reservas=" + Reservas + "]";
 	}
 	
 	

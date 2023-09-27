@@ -5,6 +5,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -21,13 +23,17 @@ public class ReservaEntity {
 	private String valor;
 	private String formatPago;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	HuespedeEntity huespe;
-	
-	
-	
 	public ReservaEntity() {
 		
+	}
+
+
+
+	public ReservaEntity(String fechaEntrada, String fechaSalida, String valor, String formatPago) {
+		this.fechaEntrada = fechaEntrada;
+		this.fechaSalida = fechaSalida;
+		this.valor = valor;
+		this.formatPago = formatPago;
 	}
 
 
@@ -40,6 +46,7 @@ public class ReservaEntity {
 		this.formatPago = formatPago;
 	}
 
+	
 
 
 	public Long getId() {
@@ -98,6 +105,14 @@ public class ReservaEntity {
 
 	public void setFormatPago(String formatPago) {
 		this.formatPago = formatPago;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "ReservaEntity [fechaEntrada=" + fechaEntrada + ", fechaSalida=" + fechaSalida + ", valor=" + valor
+				+ ", formatPago=" + formatPago + "]";
 	}
 	
 	

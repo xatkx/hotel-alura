@@ -10,11 +10,14 @@ import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import javax.swing.JTextField;
+
+import com.hotely.alura.hotel.controller.ReservaController;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.text.Format;
+import java.util.Calendar;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -37,6 +40,9 @@ public class ReservasView extends JFrame {
 	int xMouse, yMouse;
 	private JLabel labelExit;
 	private JLabel labelAtras;
+
+	
+	private int diferencia;
 
 	/**
 	 * Launch the application.
@@ -265,6 +271,7 @@ public class ReservasView extends JFrame {
 		txtFechaSalida.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				//Activa el evento, después del usuario seleccionar las fechas se debe calcular el valor de la reserva
+				getvalor(txtFechaEntrada,txtFechaSalida);
 			}
 		});
 		txtFechaSalida.setDateFormatString("yyyy-MM-dd");
@@ -273,6 +280,7 @@ public class ReservasView extends JFrame {
 		panel.add(txtFechaSalida);
 
 		txtValor = new JTextField();
+		txtValor.setText(String.valueOf(diferencia));
 		txtValor.setBackground(SystemColor.text);
 		txtValor.setHorizontalAlignment(SwingConstants.CENTER);
 		txtValor.setForeground(Color.BLACK);
@@ -296,8 +304,17 @@ public class ReservasView extends JFrame {
 		btnsiguiente.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {		
-					RegistroHuesped registro = new RegistroHuesped();
+				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {
+					
+					String fechaE = txtFechaEntrada.getDate().toString();
+					String fechaS = txtFechaSalida.getDate().toString();
+					String valor = "30";
+					String selected = txtFormaPago.getSelectedItem().toString();
+					
+					ReservaController reservaController = new ReservaController();
+					
+					int id = reservaController.Guardar(fechaE, fechaS, valor, selected);
+					RegistroHuesped registro = new RegistroHuesped(id);
 					registro.setVisible(true);
 				} else {
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
@@ -324,4 +341,11 @@ public class ReservasView extends JFrame {
 	        int y = evt.getYOnScreen();
 	        this.setLocation(x - xMouse, y - yMouse);
 }
+	    private void getvalor(JDateChooser day,  JDateChooser day2) {
+	    	if(day == null || day2 == null) {
+	    		return;
+	    		}
+	   
+			
+		}
 }

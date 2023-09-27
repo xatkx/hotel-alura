@@ -1,4 +1,4 @@
-package com.hotely.alura.hotel.controllers;
+package com.hotely.alura.hotel.dao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,19 +8,25 @@ import com.hotely.alura.hotel.model.ReservaEntity;
 
 import java.util.List;
 
-public class ReservaController {
+public class ReservaDao {
 
     private EntityManager entityManager;
 
-    public ReservaController() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("mmg"); // Reemplaza con el nombre de tu unidad de persistencia
+    public ReservaDao() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("mmg");
         entityManager = emf.createEntityManager();
     }
 
-    public void agregarReserva(ReservaEntity reserva) {
-        entityManager.getTransaction().begin();
+    public int agregarReserva(ReservaEntity reserva) {
+        long id;
+    	entityManager.getTransaction().begin();
         entityManager.persist(reserva);
+       ReservaEntity obj = entityManager.merge(reserva);
+       id = obj.getId();
         entityManager.getTransaction().commit();
+        
+        return (int) id;
+        
     }
 
     public ReservaEntity obtenerReservaEntity(long id) {

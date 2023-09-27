@@ -6,6 +6,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import com.hotely.alura.hotel.controller.HuespeController;
+import com.hotely.alura.hotel.controller.ReservaController;
+import com.hotely.alura.hotel.model.HuespedeEntity;
+import com.hotely.alura.hotel.model.ReservaEntity;
+
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -15,6 +21,7 @@ import java.awt.SystemColor;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
@@ -55,10 +62,17 @@ public class Busqueda extends JFrame {
 		});
 	}
 
+	ReservaController reserva;
+	HuespeController huespe;
+	
 	/**
 	 * Create the frame.
 	 */
 	public Busqueda() {
+		
+		reserva = new ReservaController();
+		huespe = new HuespeController();
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Busqueda.class.getResource("/imagenes/lupa2.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 571);
@@ -254,14 +268,77 @@ public class Busqueda extends JFrame {
 		contentPane.add(btnEliminar);
 		
 		JLabel lblEliminar = new JLabel("ELIMINAR");
+		lblEliminar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				eliminar();
+			}
+		});
 		lblEliminar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEliminar.setForeground(Color.WHITE);
 		lblEliminar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		lblEliminar.setBounds(0, 0, 122, 35);
 		btnEliminar.add(lblEliminar);
 		setResizable(false);
+		cargarHuespe();
+		cargarReserva();
 	}
 	
+	private boolean filafocus() {
+		return tbReservas.getSelectedRowCount() == 0 ||
+				tbReservas.getSelectedColumnCount() == 0 ||
+				tbReservas.getSelectedRow() > tbReservas.getRowCount();
+	}
+	
+	private void clean() {
+		for(int i = 0; i < modelo.getRowCount() ; i++ ) {
+			modelo.removeRow(i);
+		}
+	}
+	
+	private void eliminar() {
+		Integer select = tbReservas.getSelectedRow();
+		long	id = (long) modelo.getValueAt( select, 0);
+		
+		reserva.delete(id);
+		//clean();
+		//cargarReserva();
+		
+	
+	}
+	
+	private void cargarHuespe() {
+		List<HuespedeEntity> list = huespe.getAll();
+				
+				list.forEach( r -> {
+					modeloHuesped.addRow(new Object[] {
+							r.getId(),
+							r.getNombre(),
+							"",
+							r.getFechaNacimiento(),
+							r.getNacionalidad(),
+							r.getTelefono(),
+							r.getReservas()
+					});
+				});
+			}
+	
+	private void cargarReserva() {
+		List<ReservaEntity> list = reserva.getAll();
+		if(list == null) {
+			return;
+		}
+		list.forEach( r -> {
+			modelo.addRow(new Object[] {
+					r.getId(),
+					r.getFechaEntrada(),
+					r.getFechaSalida(),
+					r.getValor(),
+					r.getFormatPago()
+			});
+		});
+	
+	}
 //Código que permite mover la ventana por la pantalla según la posición de "x" y "y"
 	 private void headerMousePressed(java.awt.event.MouseEvent evt) {
 	        xMouse = evt.getX();

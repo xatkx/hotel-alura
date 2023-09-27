@@ -1,5 +1,8 @@
 package com.hotely.alura.hotel.views;
 
+import com.hotely.alura.hotel.controller.HuespeController;
+import com.hotely.alura.hotel.model.HuespedeEntity;
+import com.hotely.alura.hotel.model.ReservaEntity;
 import com.hotely.alura.hotel.views.ReservasView;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -8,6 +11,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import java.awt.Color;
 import com.toedter.calendar.JDateChooser;
+
+import net.bytebuddy.asm.Advice.Exit;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
@@ -39,28 +45,19 @@ public class RegistroHuesped extends JFrame {
 	private JLabel labelExit;
 	private JLabel labelAtras;
 	int xMouse, yMouse;
+	
+	int id;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RegistroHuesped frame = new RegistroHuesped();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the frame.
 	 */
-	public RegistroHuesped() {
-		
+	public RegistroHuesped(int id) {
+		this.id = id;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroHuesped.class.getResource("/imagenes/lOGO-50PX.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 634);
@@ -206,6 +203,7 @@ public class RegistroHuesped extends JFrame {
 		contentPane.add(lblNumeroReserva);
 		
 		txtNreserva = new JTextField();
+		txtNreserva.setText(String.valueOf(id));
 		txtNreserva.setFont(new Font("Roboto", Font.PLAIN, 16));
 		txtNreserva.setBounds(560, 495, 285, 33);
 		txtNreserva.setColumns(10);
@@ -262,6 +260,26 @@ public class RegistroHuesped extends JFrame {
 		btnguardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		
 		JLabel labelGuardar = new JLabel("GUARDAR");
+		labelGuardar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				String nombre = txtNombre.getText();
+				String nacionalidad = txtNacionalidad.getSelectedItem().toString();
+				ReservaEntity Reserva = new ReservaEntity();
+				Reserva.setId((long)id);
+				String telefono = txtTelefono.getText();
+				String fehcaNacimiento = txtFechaN.getDate().toString();
+				
+				HuespeController huecController = new HuespeController();
+				HuespedeEntity huespe = new HuespedeEntity(nombre, fehcaNacimiento, nacionalidad, telefono, Reserva);
+				huecController.Guardar(huespe);
+			//	System.out.println(huespe);
+				MenuUsuario menuUsuario = new MenuUsuario();
+				menuUsuario.setVisible(true);
+				dispose();
+			}
+		});
 		labelGuardar.setHorizontalAlignment(SwingConstants.CENTER);
 		labelGuardar.setForeground(Color.WHITE);
 		labelGuardar.setFont(new Font("Roboto", Font.PLAIN, 18));
